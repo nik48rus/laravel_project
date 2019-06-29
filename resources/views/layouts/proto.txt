@@ -1,0 +1,45 @@
+HTML:
+<div ng:app="app" ng:controller="ctrl">
+    <input ng-model="name">
+    <input ng-model="surname">
+<p ng-init=" name='' ">Name {{name}}!</p> 
+<div class="row" ng-repeat="l in friends | myfilter:name:'name' | myfilter:surname:'surname'">
+      <div>
+          <span class="name_span_name">{{l.name}}</span>
+          <span class="name_span_surname">{{l.surname}}</span>
+          <span class="name_span_phone">{{l.dep}}</span>
+      </div>
+</div>
+        </div>
+
+JS:
+angular.module('app', [])
+.controller('ctrl', function($scope) {
+	$scope.friends = [
+        {"name": "Name1", "surname": 'Surname6', "dep": "Dep1"},
+        {"name": "Name4", "surname": 'Surname5', "dep": "Dep2"},
+        {"name": "Name3", "surname": 'Surname4', "dep": "Dep3"},
+        {"name": "Name4", "surname": 'Surname3', "dep": "Dep4"},
+        {"name": "Name5", "surname": 'Surname2', "dep": "Dep5"},
+        {"name": "Name4", "surname": 'Surname1', "dep": "Dep6"}
+    ];
+    
+    
+})
+.filter('myfilter', function() {
+	return function(input, search, params) {
+		search = search.toLowerCase();
+        var output = [];
+        var keys = params.split(',');
+        for(var i=0; i<input.length; i++) {
+            for(var j=0; j<keys.length; j++) {
+                if(input[i][keys[j]].toLowerCase().indexOf(search) !== -1) {
+                    output.push(input[i]);
+                    break;
+                }
+            }
+        }
+        
+        return output;
+	};
+});
